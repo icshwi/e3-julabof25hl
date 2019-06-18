@@ -201,12 +201,12 @@ db:
 #
 # USR_DBFLAGS += -I . -I ..
 # USR_DBFLAGS += -I $(EPICS_BASE)/db
-# USR_DBFLAGS += -I $(APPDB)
+USR_DBFLAGS += -I $(APPDB)
+
+SUBS=$(wildcard $(APPDB)/*.substitutions)
+TMPS=$(wildcard $(APPDB)/*.template)
 #
- SUBS=$(wildcard $(APPDB)/*.substitutions)
-# TMPS=$(wildcard $(APPDB)/*.template)
-#
-# db: $(SUBS) $(TMPS)
+db: $(SUBS) $(TMPS)
 
  $(SUBS):
 	@printf "Inflating database ... %44s >>> %40s \n" "$@" "$(basename $(@)).db"
@@ -214,14 +214,14 @@ db:
 	@$(MSI) -D $(USR_DBFLAGS) -o $(basename $(@)).db -S $@  > $(basename $(@)).db.d
 	@$(MSI)    $(USR_DBFLAGS) -o $(basename $(@)).db -S $@
 
-# $(TMPS):
-#	@printf "Inflating database ... %44s >>> %40s \n" "$@" "$(basename $(@)).db"
-#	@rm -f  $(basename $(@)).db.d  $(basename $(@)).db
-#	@$(MSI) -D $(USR_DBFLAGS) -o $(basename $(@)).db $@  > $(basename $(@)).db.d
-#	@$(MSI)    $(USR_DBFLAGS) -o $(basename $(@)).db $@
+ $(TMPS):
+	@printf "Inflating database ... %44s >>> %40s \n" "$@" "$(basename $(@)).db"
+	@rm -f  $(basename $(@)).db.d  $(basename $(@)).db
+	@$(MSI) -D $(USR_DBFLAGS) -o $(basename $(@)).db $@  > $(basename $(@)).db.d
+	@$(MSI)    $(USR_DBFLAGS) -o $(basename $(@)).db $@
 
 #
-# .PHONY: db $(SUBS) $(TMPS)
+.PHONY: db $(SUBS) $(TMPS)
 
 vlibs:
 
