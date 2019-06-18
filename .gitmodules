@@ -1,0 +1,4 @@
+[submodule "julabof25hl"]
+	path = julabof25hl
+	url = https://github.com/icshwi/julabof25hl
+	ignore = all
