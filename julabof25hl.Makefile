@@ -49,9 +49,10 @@ include $(E3_REQUIRE_CONFIG)/DECOUPLE_FLAGS
 ##EXCLUDE_ARCHS = linux-ppc64e6500
 ##EXCLUDE_ARCHS += linux-corei7-poky
 
-# APP:=calcApp
-# APPDB:=$(APP)/Db
-# APPSRC:=$(APP)/src
+APP:=julabof25hlApp
+APPDB:=$(APP)/Db
+APPSRC:=$(APP)/src
+APPPROTO:=$(APP)/protocol
 
 
 # USR_INCLUDES += -I$(where_am_I)$(APPSRC)
@@ -63,10 +64,10 @@ include $(E3_REQUIRE_CONFIG)/DECOUPLE_FLAGS
 # USR_CPPFLAGS += -Wno-unused-function
 # USR_CPPFLAGS += -Wno-unused-but-set-variable
 
+TEMPLATES += $(wildcard $(APPDB)/*.db)
 # TEMPLATES += $(wildcard $(APPDB)/*.db)
-# TEMPLATES += $(wildcard $(APPDB)/*.db)
-# TEMPLATES += $(wildcard $(APPDB)/*.proto)
-# TEMPLATES += $(wildcard $(APPDB)/*.template)
+TEMPLATES += $(wildcard $(APPPROTO)/*.proto)
+TEMPLATES += $(wildcard $(APPDB)/*.template)
 
 
 # DBDINC_SRCS += $(APPSRC)/swaitRecord.c
@@ -202,16 +203,16 @@ db:
 # USR_DBFLAGS += -I $(EPICS_BASE)/db
 # USR_DBFLAGS += -I $(APPDB)
 #
-# SUBS=$(wildcard $(APPDB)/*.substitutions)
+ SUBS=$(wildcard $(APPDB)/*.substitutions)
 # TMPS=$(wildcard $(APPDB)/*.template)
 #
 # db: $(SUBS) $(TMPS)
 
-# $(SUBS):
-#	@printf "Inflating database ... %44s >>> %40s \n" "$@" "$(basename $(@)).db"
-#	@rm -f  $(basename $(@)).db.d  $(basename $(@)).db
-#	@$(MSI) -D $(USR_DBFLAGS) -o $(basename $(@)).db -S $@  > $(basename $(@)).db.d
-#	@$(MSI)    $(USR_DBFLAGS) -o $(basename $(@)).db -S $@
+ $(SUBS):
+	@printf "Inflating database ... %44s >>> %40s \n" "$@" "$(basename $(@)).db"
+	@rm -f  $(basename $(@)).db.d  $(basename $(@)).db
+	@$(MSI) -D $(USR_DBFLAGS) -o $(basename $(@)).db -S $@  > $(basename $(@)).db.d
+	@$(MSI)    $(USR_DBFLAGS) -o $(basename $(@)).db -S $@
 
 # $(TMPS):
 #	@printf "Inflating database ... %44s >>> %40s \n" "$@" "$(basename $(@)).db"
